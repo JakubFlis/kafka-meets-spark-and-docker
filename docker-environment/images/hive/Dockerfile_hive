@@ -1,0 +1,69 @@
+FROM openjdk:8u92-jdk-alpine
+
+# Versions
+ENV HADOOP_VERSION 2.7.3
+ENV HIVE_VERSION 2.0.1
+ENV DERBY_VERSION 10.14.2.0
+
+# Hadoop related variables.
+ENV HADOOP_HOME /usr/local/hadoop
+ENV HADOOP_CONF_DIR $HADOOP_HOME/conf
+ENV HADOOP_BINARY_ARCHIVE_NAME hadoop-$HADOOP_VERSION
+ENV HADOOP_BINARY_DOWNLOAD_URL https://archive.apache.org/dist/hadoop/common/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz
+ENV PATH $HADOOP_HOME/bin:$PATH
+
+# Hive related variables.
+ENV HIVE_HOME /usr/local/hive
+ENV HIVE_CONF_DIR $HIVE_HOME/conf
+ENV HIVE_BINARY_ARCHIVE_NAME apache-hive-$HIVE_VERSION-bin
+ENV HIVE_BINARY_DOWNLOAD_URL https://archive.apache.org/dist/hive/hive-$HIVE_VERSION/apache-hive-$HIVE_VERSION-bin.tar.gz
+ENV PATH $HIVE_HOME/bin:$PATH
+
+# Derby related variables.
+ENV DERBY_HOME /usr/local/derby
+ENV DERBY_BINARY_ARCHIVE_NAME db-derby-$DERBY_VERSION-bin
+ENV DERBY_BINARY_DOWNLOAD_URL http://mirrors.ukfast.co.uk/sites/ftp.apache.org//db/derby/db-derby-$DERBY_VERSION/db-derby-$DERBY_VERSION-bin.tar.gz
+
+# Add auxiliar libs
+RUN apk add -U curl bash python3 openssl procps snappy
+
+# Install Hadoop
+RUN wget -qO - ${HADOOP_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/
+RUN ln -s /usr/local/${HADOOP_BINARY_ARCHIVE_NAME} ${HADOOP_HOME}
+RUN mkdir -p $HADOOP_HOME/logs \
+  && mkdir -p $HADOOP_CONF_DIR \
+  && chmod 777 $HADOOP_CONF_DIR \
+  && chmod 777 $HADOOP_HOME/logs
+
+# Install Hive
+RUN wget -qO - ${HIVE_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/
+RUN ln -s /usr/local/${HIVE_BINARY_ARCHIVE_NAME} ${HIVE_HOME}
+RUN mkdir -p $HIVE_HOME/hcatalog/var/log \
+  && mkdir -p $HIVE_HOME/var/log \
+  && mkdir -p /data/hive/ \
+  && mkdir -p $HIVE_CONF_DIR \
+  && chmod 777 $HIVE_HOME/hcatalog/var/log \
+  && chmod 777 $HIVE_HOME/var/log
+ADD hive-site.xml ${HIVE_CONF_DIR}
+
+# Instal Derby Tools
+RUN wget -qO - ${DERBY_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/
+RUN ln -s /usr/local/${DERBY_BINARY_ARCHIVE_NAME} ${DERBY_HOME}
+
+ADD entrypoint.sh /root/entrypoint.sh
+RUN chmod +x /root/entrypoint.sh
+
+# Init Hive Env
+ADD init/ /root/hive/init
+RUN chmod +x /root/hive/init/hive_init.sh
+
+# We will be running our Spark jobs as `root` user.
+USER root
+
+# Working directory is set to the home folder of `root` user.
+WORKDIR /root
+
+EXPOSE 9083
+EXPOSE 10000
+
+ENTRYPOINT [ "/root/entrypoint.sh" ]
