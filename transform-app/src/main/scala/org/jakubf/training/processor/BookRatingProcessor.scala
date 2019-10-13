@@ -21,20 +21,17 @@ class BookRatingProcessor(spark: SparkSession) extends StreamProcessor {
         val streamingSource = prepareStreamingSource
         val streamingSink = prepareStreamingSink
         val streamData = streamingSource.read
-        val joinedData = join(fetchExistingData, streamData)
+        val joinedData = streamData
           .select($"value" cast "string")
           .withColumn("title", extractTitle($"value"))
           .withColumn("year", extractYear($"value"))
           .withColumn("isbn", extractIsbn($"value"))
+          .join(fetchExistingData(), Seq("isbn"))
           .drop("value")
 
         val sinkData = streamingSink.write(joinedData)
 
         startAndAwaitTermination(sinkData)
-    }
-
-    def join(existingData: DataFrame, incomingData: DataFrame): DataFrame = {
-        existingData.join(incomingData, Seq("isbn"))
     }
 
     def fetchExistingData(): DataFrame = {

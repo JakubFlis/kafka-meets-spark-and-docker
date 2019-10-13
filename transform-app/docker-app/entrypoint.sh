@@ -4,7 +4,7 @@ echo "Running Spark application"
 
 spark-submit \
     --master local[4] \
-    --class Main \
+    --class org.jakubf.training.Main \
     --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.0 \
     --repositories "https://raw.github.com/banzaicloud/spark-metrics/master/maven-repo/releases" \
     --conf "spark.sql.shuffle.partitions=4" \
