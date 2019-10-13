@@ -1,11 +1,10 @@
 FROM openjdk:8u92-jdk-alpine
 
 # Versions
-ENV SBT_VERSION 0.13.15
 ENV SCALA_VERSION 2.11.11
 ENV HADOOP_VERSION 2.8.3
-ENV SPARK_VERSION 2.3.1
-ENV AVRO_VERSION 1.8.2
+ENV SPARK_VERSION 2.4.0
+ENV SBT_VERSION 0.13.15
 
 # SBT related variables.
 ENV SBT_HOME /usr/local/sbt
@@ -65,7 +64,6 @@ RUN cp ${SPARK_CONF_DIR}/log4j.properties.template ${SPARK_CONF_DIR}/log4j.prope
     sed -i -e s/INFO/ERROR/g ${SPARK_CONF_DIR}/log4j.properties
 ADD hive-site.xml ${SPARK_CONF_DIR}
 
-# Add files to the container
 RUN mkdir -p /data
 RUN mkdir -p /data/config
 RUN mkdir -p /data/schemas
@@ -74,10 +72,7 @@ RUN mkdir -p /data/hive
 
 COPY . /data/job
 
-# We will be running our Spark jobs as `root` user.
 USER root
-
-# Working directory is set to the home folder of `root` user.
 WORKDIR /root
 
 EXPOSE 4040 8080 8081

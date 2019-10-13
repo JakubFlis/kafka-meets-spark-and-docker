@@ -2,12 +2,13 @@ import scala.sys.process.Process
 
 name := "transform"
 version := "0.1"
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.12"
 
-val SPARK_VERSION = "2.4.4"
+val SPARK_VERSION = "2.4.0"
 
 libraryDependencies += "org.apache.spark" %% "spark-core" % SPARK_VERSION
 libraryDependencies += "org.apache.spark" %% "spark-streaming-kafka-0-10" % SPARK_VERSION
+libraryDependencies += "org.apache.spark" %% "spark-sql-kafka-0-10" % SPARK_VERSION
 libraryDependencies += "org.apache.spark" %% "spark-streaming" % SPARK_VERSION
 libraryDependencies += "org.apache.spark" %% "spark-hive" % SPARK_VERSION
 
@@ -25,6 +26,8 @@ buildDockerImage := {
 }
 
 assemblyMergeStrategy in assembly := {
+  case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" => MergeStrategy.concat
+  case "META-INF/MANIFEST.MF" => MergeStrategy.discard
   case PathList("org", "slf4j", xs @ _ *) => MergeStrategy.first
   case PathList("META-INF", xs @ _*) => MergeStrategy.discard
   case x => MergeStrategy.first
