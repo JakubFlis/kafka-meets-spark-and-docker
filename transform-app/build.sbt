@@ -5,12 +5,17 @@ version := "0.1"
 scalaVersion := "2.11.12"
 
 val SPARK_VERSION = "2.4.0"
+val SCALA_TEST_VERSION = "3.0.8"
 
 libraryDependencies += "org.apache.spark" %% "spark-core" % SPARK_VERSION
 libraryDependencies += "org.apache.spark" %% "spark-streaming-kafka-0-10" % SPARK_VERSION
 libraryDependencies += "org.apache.spark" %% "spark-sql-kafka-0-10" % SPARK_VERSION
 libraryDependencies += "org.apache.spark" %% "spark-streaming" % SPARK_VERSION
 libraryDependencies += "org.apache.spark" %% "spark-hive" % SPARK_VERSION
+libraryDependencies += "com.databricks" %% "spark-xml" % "0.6.0"
+libraryDependencies += "org.scalactic" %% "scalactic" % SCALA_TEST_VERSION
+libraryDependencies += "org.scalatest" %% "scalatest" % SCALA_TEST_VERSION % "test"
+libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
 
 val buildDockerImage = taskKey[Unit]("")
 buildDockerImage := {
