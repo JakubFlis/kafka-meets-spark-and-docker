@@ -16,6 +16,7 @@ libraryDependencies += "com.databricks" %% "spark-xml" % "0.6.0"
 libraryDependencies += "org.scalactic" %% "scalactic" % SCALA_TEST_VERSION
 libraryDependencies += "org.scalatest" %% "scalatest" % SCALA_TEST_VERSION % "test"
 libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
+libraryDependencies += "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
 
 val buildDockerImage = taskKey[Unit]("")
 buildDockerImage := {

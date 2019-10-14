@@ -1,8 +1,8 @@
 package org.jakubf.training.processor
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions.udf
-import org.jakubf.training.sink.{ConsoleStreamSink, StreamSink}
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.jakubf.training.sink.{PostgresStreamSink, StreamSink}
 import org.jakubf.training.source.{KafkaStreamSource, StreamSource}
 
 class BookRatingProcessor(spark: SparkSession) extends StreamProcessor {
@@ -41,8 +41,8 @@ class BookRatingProcessor(spark: SparkSession) extends StreamProcessor {
     }
 
     override def prepareStreamingSource(): StreamSource =
-        new KafkaStreamSource(spark.readStream.format("com.databricks.spark.xml"))
+        new KafkaStreamSource(spark.readStream)
 
     override def prepareStreamingSink(): StreamSink =
-        new ConsoleStreamSink()
+        new PostgresStreamSink()
 }
