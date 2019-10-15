@@ -5,7 +5,7 @@ Static data is available in the Hive database under `rating_portal.book_ratings`
 
 ## Structure
 
-<img src="img/diagram.png" alt="System structure diagram" width=500px>
+![](./img/diagram.png =250x)
 
 ### Data Producer App
 Data Producer application produces infinitely 10 messages for given Kafka topic every 5 seconds. The messages have following structure:
