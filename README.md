@@ -35,26 +35,40 @@ Docker files included under `docker-environment`consist of all necessary depende
 
 * Docker
 * SBT
+* Windows users: https://stackoverflow.com/a/35652866
 
-## Running the process
+## Running the process using scripts
 
-To run the process:
+To run the process (tested on macOS):
 
+1. Modify path in the `run_transform_app_docker_image` function inside `buildEnvsAndStartTransform.sh` script to properly point to `docker-environment/services/hive/volumes/data` directory
 1. Add an entry to `/etc/hosts` file: `host.docker.internal` with your machine's IP, for example:
 `177.16.19.206 host.docker.internal`
 2. Execute `bash buildEnvsAndStartTransform.sh`
 3. In another terminal window, execute `startProducer.sh`
-4. In both terminals, you should see generated  and consumed data.
+4. You should see generated and consumed data in both terminals.
 
 In order to check the output data in the DB, run
 `bash -c "clear && docker exec -it postgres sh"`
 and fetch records from `sink.books` table.
 
+## Running on Windows
+
+You can follow the script solution from above, but it's recommended to use these manual steps when running the system on Windows OS:
+
+1. Follow these instructions and install Hadoop winutils: https://stackoverflow.com/a/35652866
+2. Add an entry to `/etc/hosts` file: `host.docker.internal` with your machine's IP, for example:
+`177.16.19.206 host.docker.internal`
+3. Go to `transform-app` folder and build Transform Docker image using `sbt buildDockerImage` command
+4. Go to `docker-environment` folder and run the environemnt by using `docker-compose up` command
+5. Run the Transform app using this command: `docker run -it -v /Users/jakubflis/Projects/kafka-meets-spark-and-docker/docker-environment/services/hive/volumes/data:/data/hive jf_transform:latest`. Prior to running the command, you should modify the Hive data path to point to proper directory on your disc.
+6. Run the Producer app using this command: `docker run jf_data_producer`
+
+
 ## TODOs
 
 In order of priority:
 
-* Write unit tests for all Processors,
 * Extract all configuration and properties, make it independent from the app,
 * Expand `Process` class to support multiple Sinks and Sources,
 * Refactor `build.sbt` to support better versioning,
