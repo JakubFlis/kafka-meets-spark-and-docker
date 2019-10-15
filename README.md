@@ -5,7 +5,7 @@ Static data is available in the Hive database under `rating_portal.book_ratings`
 
 ## Structure
 
-![System structure diagram](img/diagram.png)
+<img src="img/diagram.png" alt="System structure diagram" width=500px>
 
 ### Data Producer App
 Data Producer application produces infinitely 10 messages for given Kafka topic every 5 seconds. The messages have following structure:
@@ -48,8 +48,9 @@ and fetch records from `sink.books` table.
 
 ## TODOs
 In order of priority:
-* Write unit tests for all Processors,
-* Extract all configuration and properties, make it independent from the app,
-* Expand `Process` class to support multiple Sinks and Sources,
-* Refactor `build.sbt` to support better versioning,
-* Consider CI/CD solutions.
+- Write unit tests for all Processors,
+- Extract all configuration and properties, make it independent from the app,
+- Expand `Process` class to support multiple Sinks and Sources,
+- Refactor `build.sbt` to support better versioning,
+- Code documentation,
+- Consider CI/CD solutions.
