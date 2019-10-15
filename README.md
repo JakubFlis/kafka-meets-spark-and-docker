@@ -41,9 +41,7 @@ Docker files included under `docker-environment`consist of all necessary depende
 To run the process:
 
 1. Add an entry to `/etc/hosts` file: `host.docker.internal` with your machine's IP, for example:
-
 `177.16.19.206 host.docker.internal`
-
 2. Execute `bash buildEnvsAndStartTransform.sh`
 3. In another terminal window, execute `startProducer.sh`
 4. In both terminals, you should see generated  and consumed data.
