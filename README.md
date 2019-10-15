@@ -39,18 +39,26 @@ Docker files included under `docker-environment`consist of all necessary depende
 ## Running the process
 
 To run the process:
-1. Execute `bash buildEnvsAndStartTransform.sh`
-2. In another terminal window, execute `startProducer.sh`
+
+1. Add an entry to `/etc/hosts` file: `host.docker.internal` with your machine's IP, for example:
+
+`177.16.19.206 host.docker.internal`
+
+2. Execute `bash buildEnvsAndStartTransform.sh`
+3. In another terminal window, execute `startProducer.sh`
+4. In both terminals, you should see generated  and consumed data.
 
 In order to check the output data in the DB, run
 `bash -c "clear && docker exec -it postgres sh"`
 and fetch records from `sink.books` table.
 
 ## TODOs
+
 In order of priority:
-- Write unit tests for all Processors,
-- Extract all configuration and properties, make it independent from the app,
-- Expand `Process` class to support multiple Sinks and Sources,
-- Refactor `build.sbt` to support better versioning,
-- Code documentation,
-- Consider CI/CD solutions.
+
+* Write unit tests for all Processors,
+* Extract all configuration and properties, make it independent from the app,
+* Expand `Process` class to support multiple Sinks and Sources,
+* Refactor `build.sbt` to support better versioning,
+* Code documentation,
+* Consider CI/CD solutions.
