@@ -1,4 +1,4 @@
-package org.jakubf.training
+package org.jakubf.training.configuration
 
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession

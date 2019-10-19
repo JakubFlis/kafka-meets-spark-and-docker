@@ -1,4 +1,4 @@
-package org.jakubf.training
+package org.jakubf.training.configuration
 
 import java.util.Properties
 

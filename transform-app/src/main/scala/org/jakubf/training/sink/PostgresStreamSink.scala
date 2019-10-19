@@ -2,7 +2,7 @@ package org.jakubf.training.sink
 
 import org.apache.spark.sql.streaming.DataStreamWriter
 import org.apache.spark.sql.{DataFrame, Row, SaveMode}
-import org.jakubf.training.PostgreSQLConfiguration
+import org.jakubf.training.configuration.PostgreSQLConfiguration
 
 class PostgresStreamSink extends StreamSink with PostgreSQLConfiguration {
   override def write(dataFrame: DataFrame): DataStreamWriter[Row] = {
