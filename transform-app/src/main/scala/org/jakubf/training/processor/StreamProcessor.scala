@@ -8,13 +8,13 @@ import org.jakubf.training.source.StreamSource
 abstract class StreamProcessor() {
     def startProcessing(): Unit
 
-    def startAndAwaitTermination(dataFrame: DataStreamWriter[Row]): Unit = {
-      dataFrame
-        .start
-        .awaitTermination()
-    }
-
     def prepareStreamingSource(): StreamSource
 
     def prepareStreamingSink(): StreamSink
+
+    def startAndAwaitTermination(dataFrame: DataStreamWriter[Row]): Unit = {
+        dataFrame
+          .start
+          .awaitTermination()
+    }
 }

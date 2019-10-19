@@ -8,19 +8,18 @@ import org.jakubf.training.source.{KafkaStreamSource, StreamSource}
 class BookRatingProcessor(spark: SparkSession) extends StreamProcessor {
   val streamingSource = prepareStreamingSource
   val streamingSink = prepareStreamingSink
+  val extractTitle = udf[String, String] { xml ⇒
+    scala.xml.XML.loadString(xml) \ "title" text
+  }
+  val extractYear = udf[String, String] { xml ⇒
+    scala.xml.XML.loadString(xml) \@ "year"
+  }
+  val extractIsbn = udf[String, String] { xml ⇒
+    scala.xml.XML.loadString(xml) \ "isbn" text
+  }
 
   override def startProcessing(): Unit = {
       import spark.implicits._
-      val extractTitle = udf[String, String] { xml ⇒
-          scala.xml.XML.loadString(xml) \ "title" text
-      }
-      val extractYear = udf[String, String] { xml ⇒
-          scala.xml.XML.loadString(xml) \@ "year"
-      }
-      val extractIsbn = udf[String, String] { xml ⇒
-          scala.xml.XML.loadString(xml) \ "isbn" text
-      }
-
       val streamData = streamingSource.read
       val joinedData = streamData
         .select($"value" cast "string")
