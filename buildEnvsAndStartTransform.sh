@@ -17,7 +17,7 @@ build_transform_app_docker_image(){
 
 run_transform_app_docker_image(){
     echo "Running Transform App Docker image..."
-    docker run -it -v /Users/jakubflis/Projects/kafka-meets-spark-and-docker/docker-environment/services/hive/volumes/data:/data/hive jf_transform:latest
+    docker run -it -v C:\Users\Jake\Documents\kafka-meets-spark-and-docker\docker-environment\services\hive\volumes\data:/data/hive jf_transform:latest
 }
 
 main() {
