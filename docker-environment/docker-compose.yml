@@ -43,26 +43,30 @@ services:
     extra_hosts:
       - "moby:127.0.0.1"
       - "localhost: 127.0.0.1"
-
-  postgres:
-    image: postgres
-    container_name: postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      PGDATA: /data/postgres
-    volumes:
-      - ./services/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./services/postgres/volumes/data:/data/postgres
-    ports:
-      - 5432:5432
-    networks:
-       - postgres
+#
+#
+# !! POSTGRES DISABLED FOR WINDOWS VERSION DUE TO VOLUME/NETWORKING ISSUES !! #
+#
+#
+#   postgres:
+#     image: postgres
+#     container_name: postgres
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_USER: ${POSTGRES_USER:-postgres}
+#       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+#       PGDATA: /data/postgres
+#     volumes:
+#       - ./services/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+#       - ./services/postgres/volumes/data:/data/postgres
+#     ports:
+#       - 5432:5432
+#     networks:
+#        - postgres
     
-networks:
-  postgres:
-    driver: bridge
+# networks:
+#   postgres:
+#     driver: bridge
 
-volumes:
-    services:
+# volumes:
+#     services:
