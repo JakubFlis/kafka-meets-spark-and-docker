@@ -3,6 +3,12 @@
 A set of Docker images and application to support an ETL process, which listens for XML values containing book metadata, then joins the metadata with existing, static data, and finally saves the output in the sink database. 
 Static data is available in the Hive database under `rating_portal.book_ratings` table, and the output is available in PostgreSQL database under `sink.books` table.
 
+
+## Running on Windows
+
+Please use `windows-os` branch for running the process on Windows.
+
+
 ## Structure
 
 ![](./img/diagram.png =250x)
@@ -52,20 +58,9 @@ In order to check the output data in the DB, run
 `bash -c "clear && docker exec -it postgres sh"`
 and fetch records from `sink.books` table.
 
-## Running on Windows
-
-You can follow the script solution from above, but it's recommended to use these manual steps when running the system on Windows OS:
-
-1. Follow these instructions and install Hadoop winutils: https://stackoverflow.com/a/35652866
-2. Add an entry to `/etc/hosts` file: `host.docker.internal` with your machine's IP, for example:
-`177.16.19.206 host.docker.internal`
-3. Go to `transform-app` folder and build Transform Docker image using `sbt buildDockerImage` command
-4. Go to `docker-environment` folder and run the environemnt by using `docker-compose up` command
-5. Run the Transform app using this command: `docker run -it -v /Users/jakubflis/Projects/kafka-meets-spark-and-docker/docker-environment/services/hive/volumes/data:/data/hive jf_transform:latest`. Prior to running the command, you should modify the Hive data path to point to proper directory on your disc.
-6. Run the Producer app using this command: `docker run jf_data_producer`
-
-
 ## TODOs
+
+Some of planned improvements were already implemented on the `further-improvements` branch.
 
 In order of priority:
 
