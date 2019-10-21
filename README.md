@@ -1,4 +1,5 @@
-# Kafka meets Spark and Docker
+# Kafka meets Spark and Docker - Windows version
+
 
 A set of Docker images and application to support an ETL process, which listens for XML values containing book metadata, then joins the metadata with existing, static data, and finally saves the output in the sink database. 
 Static data is available in the Hive database under `rating_portal.book_ratings` table, and the output is available in PostgreSQL database under `sink.books` table.
@@ -25,38 +26,38 @@ Transform application listens for Kafka messages sent by the Data Producer appli
 
 ### Environment
 
-Docker files included under `docker-environment`consist of all necessary dependencies needed for the ETL flow to be successful. Used services:
+Docker files included under `docker-environment` consist of all necessary dependencies needed for the ETL flow to be successful. Used services:
 * Kafka
 * Zookeeper
 * Hive
-* PostgreSQL
+* PostgreSQL (NOT used in Windows version - ConsoleStreamSink is used instead due to PostgreSQL Docker image issues)
 
 ## Prerequisites
 
 * Docker
 * SBT
 
-## Running the process
+## Running on Windows
 
-To run the process:
+Please run following instructions using separate Terminal windows for each step.
 
-1. Add an entry to `/etc/hosts` file: `host.docker.internal` with your machine's IP, for example:
-`177.16.19.206 host.docker.internal`
-2. Execute `bash buildEnvsAndStartTransform.sh`
-3. In another terminal window, execute `startProducer.sh`
-4. In both terminals, you should see generated  and consumed data.
+1. Follow these instructions and install Hadoop winutils: https://stackoverflow.com/a/35652866
+2. Add an entry to `/etc/hosts` file: `host.docker.internal` with your machine's IP (for Windows - localhost), for example:
+`127.0.0.1 host.docker.internal`
+3. Go to `transform-app` folder and build Transform Docker image using `sbt buildDockerImage` command
+4. Go to `docker-environment` folder and run the environemnt by using `docker-compose up` command
+5. Run the Transform app using this command: `docker run -it -v  C:\Users\{USER}\Documents\kafka-meets-spark-and-docker\docker-environment\services\hive\volumes\data:/data/hive jf_transform:latest`. Prior to running the command, you should modify the Hive data path to point to proper directory on your disc.
+6. Run the Producer app using this command: `docker run jf_data_producer`
+7. Watch batches of data being printed in both terminals, like below:
 
-In order to check the output data in the DB, run
-`bash -c "clear && docker exec -it postgres sh"`
-and fetch records from `sink.books` table.
+![](./img/win_screenshot.png =250x)
 
 ## TODOs
 
 In order of priority:
 
-* Write unit tests for all Processors,
 * Extract all configuration and properties, make it independent from the app,
 * Expand `Process` class to support multiple Sinks and Sources,
 * Refactor `build.sbt` to support better versioning,
-* Code documentation,
-* Consider CI/CD solutions.
+* Write code documentation,
+* Consider CI/CD and Production environment solutions.
