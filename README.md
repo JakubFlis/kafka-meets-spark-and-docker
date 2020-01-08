@@ -11,7 +11,10 @@ Please use `windows-os` branch for running the process on Windows.
 
 ## Structure
 
-![](./img/diagram.png =250x)
+<p align="center">
+  <img src="img/diagram.png" width="750">
+</p>
+
 
 ### Data Producer App
 Data Producer application produces infinitely 10 messages for given Kafka topic every 5 seconds. The messages have following structure:
